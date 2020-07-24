@@ -1,18 +1,18 @@
 from bs4 import BeautifulSoup
 import requests
-url = "https://www.wunderground.com/history/monthly/in/pune/VAPO"
-
+url = "https://www.wunderground.com/history/monthly/in/pune/VAPO/date/2020-6"
+# loading monthly data of pune of JUNE
 page = requests.get(url)
-soup = BeautifulSoup(page.text,'html.parser')
+soup = BeautifulSoup(page.content,'lxml')
 for i in range(5):
-    body = soup.find(class_="columns small-12") # there are multiple tables of the same class
+    body = soup.find('table') # there are multiple tables of the same class
     print(""" 
     -------START------
 
 
     -------Prints one table----
     """)
-    print(body) # printing all the Tables
+    print(body.prettify()) # printing all the Tables
     print(""" 
 
     --------END-------
