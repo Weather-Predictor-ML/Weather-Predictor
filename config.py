@@ -3,9 +3,10 @@ from selenium import webdriver
 NAME="Pune"
 FILTERS={
     "state": "history",
-    "period": "monthly"
+    "period": "monthly",
+    "date" : "2020-7"
 }
-BASE_URL = "https://www.wunderground.com/"
+BASE_URL = "https://www.wunderground.com/history/monthly/in/pune/VAPO"#"https://www.wunderground.com/"
 
 
 def get_chrome_web_driver(options):
