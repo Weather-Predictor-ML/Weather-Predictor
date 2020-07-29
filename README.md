@@ -1,6 +1,6 @@
 webscrapper
 ===========
-testing webscrapping with BeautifulSoup and Requests modules
+testing webscrapping with BeautifulSoup and Selenium modules
 
 ## Done
  * Connected to the page
