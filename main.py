@@ -23,8 +23,12 @@ class WUndergroundAPI:
         self.set_filter = f"/{filter['state']}/{filter['period']}/"
     
     def Run(self):
-        print("STarting the script...")
+        print("Starting the script...")
+        print(f"Looking for {self.searchTerm}")
+        self.GetPage()
+    
+    
 
 
 if __name__ == '__main__' :
-    WUndergroundAPI(N)
+    hi= WUndergroundAPI(NAME,BASE_URL,FILTERS)
