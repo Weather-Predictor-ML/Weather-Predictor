@@ -29,11 +29,11 @@ class WUndergroundAPI:
     def Run(self):
         print("Starting the script...")
         print(f"Looking for {self.searchTerm}")
-        PageSource=self.GetPage()
+        PageSource=self.GetPageData()
         self.ScarpData(PageSource)
         
 
-    def GetPage(self):
+    def GetPageData(self):
         self.driver.get(self.baseURL)
         time.sleep(1)
         self.driver.get(f"{self.driver.current_url}/{self.set_filter}")
@@ -55,6 +55,7 @@ class WUndergroundAPI:
                 trial = trial.strip('  ')
                 data.append(trial)
         print(data)
+
     # def GetPage(self):
     #     self.driver.get(self.baseURL)
     #     element = self.driver.find_element_by_id("wuSearch")
