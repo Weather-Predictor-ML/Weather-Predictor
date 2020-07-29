@@ -6,7 +6,7 @@ testing webscrapping with BeautifulSoup and Requests modules
  * Connected to the page
  * Parsed through to find the table tags
  * Printed the raw table data without processing 
+ * Got the raw Data
  
 ## To be Done
- * Parsed through to get only the table we need
  * Process the data
