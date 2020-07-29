@@ -1,20 +1,30 @@
-from bs4 import BeautifulSoup
-import requests
-url = "https://www.wunderground.com/history/monthly/in/pune/VAPO/date/2020-6"
-# loading monthly data of pune of JUNE
-page = requests.get(url)
-soup = BeautifulSoup(page.content,'lxml')
-for i in range(5):
-    body = soup.find('table') # there are multiple tables of the same class
-    print(""" 
-    -------START------
+from config import (
+    get_web_driver_options,
+    get_chrome_web_driver,
+    set_ignore_certificate_error,
+    set_browser_as_incognito,
+    set_automation_as_head_less,
+    BASE_URL,
+    NAME,
+    FILTERS)
 
+#url = "https://www.wunderground.com/{history}/{monthly}/in/pune/VAPO/date/2020-6"
 
-    -------Prints one table----
-    """)
-    print(body.prettify()) # printing all the Tables
-    print(""" 
+#wuSearch
 
-    --------END-------
+class WUndergroundAPI:
+    def __init__(self,searchTerm,baseURL,filter):
+        self.baseURL=baseURL
+        self.searchTerm=searchTerm
+        options = get_web_driver_options()
+        set_ignore_certificate_error(options)
+        set_browser_as_incognito(options)
+        self.driver=get_chrome_web_driver(options)
+        self.set_filter = f"/{filter['state']}/{filter['period']}/"
     
-    """)
+    def Run(self):
+        print("STarting the script...")
+
+
+if __name__ == '__main__' :
+    WUndergroundAPI(N)
