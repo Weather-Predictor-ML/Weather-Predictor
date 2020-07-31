@@ -1,5 +1,5 @@
 import time
-from selenium.webdriver.common.keys import Keys
+#from selenium.webdriver.common.keys import Keys
 import pandas as pd
 from functools import reduce
 from config import (
@@ -12,10 +12,10 @@ from config import (
     NAME,
     FILTERS)
 from bs4 import BeautifulSoup as BS
-#url = "https://www.wunderground.com/{history}/{monthly}/in/pune/VAPO/date/2020-6"
 
-#wuSearch
+
 class DataHandler:
+    """It takes Raw data (list) produced by the API and process it to create dataset for one month"""
     def __init__(self, Data,filter):
         print("Processing the data....")
         self.rawData = Data
@@ -24,12 +24,16 @@ class DataHandler:
         self.MakeCSV(Dataframe)
 
     def MakeCSV(self,DF):
+        """Convert A DataFrame to a CSV file"""
         self.df=DF
         self.df.to_csv('data.csv',index=None)
+        print(f"Created File for {self.filter['date']}")
 
     def ProcessData(self, data):
+        """Process the RawData produced by the API and greats a DataFrame"""
         self.data= data
         list_of_df=[]
+        print("Processing the data....")
         if round(len(self.data) / 17 - 1) == 31:
             Temperature = pd.DataFrame([self.data[32:128][x:x + 3] for x in range(0, len(self.data[32:128]), 3)][1:],
                                        columns=['Temp_max', 'Temp_avg', 'Temp_min'])
@@ -87,7 +91,7 @@ class DataHandler:
             Precipitation = pd.DataFrame(self.data[496:][1:], columns=['Precipitation'])
             print(f"{self.filter['date']} finished")
         else:
-            print('data not in normal length')
+            print('Data not in normal length')
 
         dfs = [Date, Temperature, Dew_Point, Humidity, Wind, Pressure, Precipitation]
 
@@ -97,12 +101,11 @@ class DataHandler:
         print(f"Data processed for {self.filter['date']}")
         return df_final
         #list_of_df.append(df_final)
-
-        #print('Scraper done!')
-        #print(type(list_of_df[0]))
        # print (list_of_df)
 
 class WUndergroundAPI:
+    """This Api will create a VM on the page it acess and Then scrap the data of the page and then 
+    A raw set of the data  of the Dailt Observation is produced and returned """
     def __init__(self,searchTerm,baseURL,filter):
         self.baseURL=baseURL
         self.searchTerm=searchTerm
@@ -118,10 +121,11 @@ class WUndergroundAPI:
         print("Starting the script...")
         print(f"Looking for {self.searchTerm}")
         PageSource=self.GetPageData()
-        Data=self.ScarpData(PageSource)
+        Data=self.ScrapeData(PageSource)
         return Data
 
     def GetPageData(self):
+        """Creates the VM to open the page and returns the page Source"""
         self.driver.get(self.baseURL)
         time.sleep(1)
         self.driver.get(f"{self.driver.current_url}/{self.set_filter}")
@@ -131,7 +135,8 @@ class WUndergroundAPI:
         print(f"Got the page Data for {self.filter['date']}....")
         return PageSource
             
-    def ScarpData(self, page_source):
+    def ScrapeData(self, page_source):
+        """The page source is a scraped to returns the data of the Table"""
         print("Scraping the Data....")
         soup = BS(page_source, "html.parser")
         container = soup.find('lib-city-history-observation')
@@ -148,6 +153,7 @@ class WUndergroundAPI:
 
     
     # def GetPage(self):
+    #     """Opens the BaseURl and navigated to the page needed to scrape data from"""
     #     self.driver.get(self.baseURL)
     #     element = self.driver.find_element_by_id("wuSearch")
     #     element.send_keys(self.searchTerm)
