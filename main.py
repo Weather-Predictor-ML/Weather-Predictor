@@ -26,13 +26,13 @@ class DataHandler:
     def MakeCSV(self,DF):
         """Convert A DataFrame to a CSV file"""
         self.df=DF
-        self.df.to_csv('data.csv',index=None)
+        self.df.to_csv('data.csv',index=False)
         print(f"Created File for {self.filter['date']}")
 
     def ProcessData(self, data):
         """Process the RawData produced by the API and greats a DataFrame"""
         self.data= data
-        list_of_df=[]
+        #list_of_df=[]
         print("Processing the data....")
         if round(len(self.data) / 17 - 1) == 31:
             Temperature = pd.DataFrame([self.data[32:128][x:x + 3] for x in range(0, len(self.data[32:128]), 3)][1:],
