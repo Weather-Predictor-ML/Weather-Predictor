@@ -10,14 +10,19 @@ import pickle
 style.use("ggplot")
 data= pd.read_csv("data.csv")
 
-predictlist="Wind_avg".split(',')
+
+predictlist="Temp_avg,Dew_avg,Hum_avg,Wind_avg,Pres_avg,Precipitation".split(',')
+
 for predict in predictlist:
-    print('----------X--------------------X--------------')
+
     x=np.array(data.drop(["Jul","Date",predict],1))
     y=np.array(data[predict])
 
-    x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.1)
-
+    x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.9)
+    
+    '''
+    print('----------X--------------------X--------------')
+   
     best = 0
     for _ in range(1000):
         x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.1)
@@ -35,9 +40,11 @@ for predict in predictlist:
 
     print("------------------------")           
     print("Final Accuracy: " + str(best))
-    print("------------------------")           
+    print("------------------------")           '''
 
-    pickle_in = open(f"{predict}.pickle", "rb")
+    filename=f"Models\{predict}.pickle"
+    print(filename)
+    pickle_in = open(filename, "rb")
     linear = pickle.load(pickle_in)
 
 
@@ -49,3 +56,7 @@ for predict in predictlist:
     predicted= linear.predict(x_test)
     for x in range(len(predicted)):
         print(f"Predicted :{predicted[x]}, for Data Giver: {x_test[x]},Expected Data show be:{y_test[x]}")
+
+    print("""
+
+    """)
