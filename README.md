@@ -9,9 +9,10 @@ Using the Created Webscraping Api, and data collected by it create a machine lea
     * Printed the raw table data without processing 
     * Got the raw Data
     * Processed the Data got the CSV file
-
+    * learned how we can use this data
+    * train a model
+    
+    
  ## What's Next
- 1. learning how we can use this data
- 2. modules we would need to work with the data
- 3. train a model
 
+   Making A GUI and adding Application to the model created
