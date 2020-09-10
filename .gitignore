@@ -1,0 +1,20 @@
+
+
+# Temporary files
+.#~
+*.*~
+~.#~
+/.#~
+.vscode*
+
+#*.pickle
+
+
+venv/
+Pipfile
+Pipfile.lock
+
+Weather-predictor/
+Pipfile
+Pipfile.lock
+

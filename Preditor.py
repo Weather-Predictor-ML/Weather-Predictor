@@ -1,63 +1,90 @@
+#%%
 import numpy as np
 import pandas as pd
 from sklearn import linear_model
 import sklearn
-from sklearn.utils import shuffle
-import matplotlib.pyplot as plt
-from matplotlib import style
 import pickle
 
-style.use("ggplot")
-data= pd.read_csv("data.csv")
+#%%
+data= pd.read_csv('Final testing data.csv')
+
+# print(data.info())
+#%%
+Modelnames={'Temp_avg':['Temp_max_1','Temp_avg_1','Temp_min_1'],
+'Hum_avg':['Dew_max_1','Dew_avg_1','Dew_min_1','Hum_max_1','Hum_avg_1','Hum_min_1'],
+'Precipitation':['Precipitation_1']}
 
 
-predictlist="Temp_avg,Dew_avg,Hum_avg,Wind_avg,Pres_avg,Precipitation".split(',')
+def Checktraining():
+    Choice =input("Are we Training?(y/n)\n")
+    return Choice.lower()=='y'
 
-for predict in predictlist:
-
-    x=np.array(data.drop(["Jul","Date",predict],1))
-    y=np.array(data[predict])
-
-    x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.9)
+def datasplit(x,y):
+    return sklearn.model_selection.train_test_split(x, y, test_size=0.01)
     
-    
-    '''
-    print('----------X--------------------X--------------')
-   
+def Train(x,y):
     best = 0
-    for _ in range(1000):
-        x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(x, y, test_size=0.1)
+    for _ in range(100000):
+        x_train, x_test, y_train, y_test =datasplit(x,y)
 
         linear = linear_model.LinearRegression()
 
         linear.fit(x_train, y_train)
         acc = linear.score(x_test, y_test)
         #print("Accuracy: " + str(acc))
+    
 
         if acc > best:
             best = acc
-            with open(f"{predict}.pickle", "wb") as f:
+
+            with open(f"Models/{Modelname}.pickle", "wb") as f:
                 pickle.dump(linear, f)
 
-    print("------------------------")           
+    print("------------------------")        
     print("Final Accuracy: " + str(best))
-    print("------------------------")           '''
+    print("------------------------")           
 
-    filename=f"Models\{predict}.pickle"
-    print(filename)
-    pickle_in = open(filename, "rb")
-    linear = pickle.load(pickle_in)
+    
 
+def  Test(X,Y,training,linear=None ):
+    if training:
+        _, X, __, Y =datasplit(X,Y)
+
+    if linear==None:
+        try:
+            filename=f"Models/{Modelname}.pickle"
+            print(filename)
+            pickle_in = open(filename, "rb")
+            linear = pickle.load(pickle_in)
+        except :
+            print("No Model Found")
+            quit()
 
     print("-------------------------")
     print('Coefficient: \n', linear.coef_)
     print('Intercept: \n', linear.intercept_)
     print("-------------------------")
 
-    predicted= linear.predict(x_test)
+    predicted= linear.predict(X)
     for x in range(len(predicted)):
-        print(f"Predicted :{predicted[x]}, for Data Giver: {x_test[x]},Expected Data show be:{y_test[x]}")
+        print(f"Predicted :{predicted[x]}, for Data Giver: {X[x]},Expected Data show be:{Y[x]}")
 
-    print("""
+    
 
-    """)
+# print("""
+ 
+# """)
+# 
+if __name__ == "__main__":
+    
+    for Modelname in Modelnames:
+        x=np.array(data[Modelnames[Modelname]])
+        y=np.array(data[Modelname])
+        training = Checktraining()
+        if training:
+            print(f"Starting to train data for {Modelname}")
+            Train(x,y)
+            print(f"Done training data for {Modelname}")
+        print(f"Starting Testing data for {Modelname}")
+        Test(x,y,training=False)
+        print(f"Done testing data for {Modelname}")
